@@ -15,6 +15,8 @@
 package zlog
 
 import (
+	"flag"
+
 	"github.com/mholt/caddy"
 	"github.com/mholt/caddy/caddyhttp/httpserver"
 )
@@ -28,6 +30,10 @@ func init() {
 
 // setup configures a new mime middleware instance.
 func setup(c *caddy.Controller) error {
+
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 
 	httpserver.GetConfig(c).AddMiddleware(func(next httpserver.Handler) httpserver.Handler {
 		return WithLog(ZLog{Next: next})
