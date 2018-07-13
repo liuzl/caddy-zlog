@@ -8,7 +8,7 @@
 
 Rebuild caddy as follows:
 
-1. `git clone https://github.com/liuzl/caddy-log`
+1. `git clone https://github.com/liuzl/caddy-zlog`
 2. copy `caddy-zlog` to `github.com/mholt/caddy/caddyhttp/zlog`
 3. add `_ "github.com/mholt/caddy/caddyhttp/zlog"` to file `github.com/mholt/caddy/caddyhttp/caddyhttp.go`
 4. add `zlog` to the variable `directives` in file `github.com/mholt/caddy/caddyhttp/httpserver/plugin.go`
