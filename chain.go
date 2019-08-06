@@ -1,6 +1,6 @@
 package zlog
 
-import "github.com/mholt/caddy/caddyhttp/httpserver"
+import "github.com/caddyserver/caddy/caddyhttp/httpserver"
 
 // A constructor for a piece of middleware.
 // Some middleware use this constructor out of the box,

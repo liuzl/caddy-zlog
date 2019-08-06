@@ -17,7 +17,7 @@ package zlog
 import (
 	"net/http"
 
-	"github.com/mholt/caddy/caddyhttp/httpserver"
+	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 )
 
 type ZLog struct {

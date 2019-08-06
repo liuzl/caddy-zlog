@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/caddyserver/caddy/caddyhttp/httpserver"
 	"github.com/liuzl/filestore"
-	"github.com/mholt/caddy/caddyhttp/httpserver"
 	"github.com/rs/zerolog"
 )
 
