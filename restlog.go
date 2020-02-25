@@ -1,7 +1,6 @@
 package zlog
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,19 +14,13 @@ import (
 	"github.com/rs/zerolog"
 )
 
-var (
-	dir = flag.String("zlog_dir",
-		filepath.Join(filepath.Dir(os.Args[0]), "zerolog"), "zerolog dir")
-)
-
 var c Chain
-var once sync.Once
 
-func initZlog() {
+func initZlog(dir string, once sync.Once) {
 	once.Do(func() {
 		hostname, _ := os.Hostname()
 		var out io.Writer
-		f, err := filestore.NewFileStore(*dir)
+		f, err := filestore.NewFileStore(dir)
 		if err != nil {
 			out = os.Stdout
 			fmt.Fprintf(os.Stderr, "err: %+v, will zerolog to stdout\n", err)
@@ -58,7 +51,7 @@ func initZlog() {
 
 		// Install some provided extra handler to set some request's context fields.
 		// Thanks to those handler, all our logs will come with some pre-populated fields.
-		c = c.Append(RemoteAddrHandler("ip"))
+		c = c.Append(RemoteAddrHandler("server"))
 		c = c.Append(HeaderHandler("X-Forwarded-For"))
 		c = c.Append(HeaderHandler("User-Agent"))
 		c = c.Append(HeaderHandler("Referer"))
@@ -71,7 +64,7 @@ func initZlog() {
 	})
 }
 
-func WithLog(h httpserver.Handler) httpserver.Handler {
-	initZlog()
+func WithLog(h httpserver.Handler, dir string, once sync.Once) httpserver.Handler {
+	initZlog(dir, once)
 	return c.Then(h)
 }
