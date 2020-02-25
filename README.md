@@ -18,6 +18,8 @@ Rebuild caddy as follows:
 
 ```
 127.0.0.1 {
-    zlog
+    zlog {
+        log_dir ./server_zerolog
+    }
 }
 ```
