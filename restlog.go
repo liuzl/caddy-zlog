@@ -16,11 +16,11 @@ import (
 
 var c Chain
 
-func initZlog(dir string, once sync.Once) {
+func initZlog(dir, splitBy string, once sync.Once) {
 	once.Do(func() {
 		hostname, _ := os.Hostname()
 		var out io.Writer
-		f, err := filestore.NewFileStore(dir)
+		f, err := filestore.NewFileStorePro(dir, splitBy)
 		if err != nil {
 			out = os.Stdout
 			fmt.Fprintf(os.Stderr, "err: %+v, will zerolog to stdout\n", err)
@@ -64,7 +64,8 @@ func initZlog(dir string, once sync.Once) {
 	})
 }
 
-func WithLog(h httpserver.Handler, dir string, once sync.Once) httpserver.Handler {
-	initZlog(dir, once)
+func WithLog(h httpserver.Handler,
+	dir, splitBy string, once sync.Once) httpserver.Handler {
+	initZlog(dir, splitBy, once)
 	return c.Then(h)
 }

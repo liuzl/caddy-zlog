@@ -46,13 +46,18 @@ func setup(c *caddy.Controller) error {
 	}
 	var once sync.Once
 
-	httpserver.GetConfig(c).AddMiddleware(func(next httpserver.Handler) httpserver.Handler {
-		if log_dir, ok := configs["log_dir"]; ok {
-			return WithLog(ZLog{Next: next}, log_dir, once)
-		}
-		log_dir := filepath.Join(filepath.Dir(os.Args[0]), "zerolog")
-		return WithLog(ZLog{Next: next}, log_dir, once)
-	})
+	httpserver.GetConfig(c).AddMiddleware(
+		func(next httpserver.Handler) httpserver.Handler {
+			var dir, splitBy string
+			var ok bool
+			if dir, ok = configs["log_dir"]; !ok {
+				dir = filepath.Join(filepath.Dir(os.Args[0]), "zerolog")
+			}
+			if splitBy, ok = configs["split_by"]; !ok || splitBy != "hour" {
+				splitBy = "day"
+			}
+			return WithLog(ZLog{Next: next}, dir, splitBy, once)
+		})
 
 	return nil
 }

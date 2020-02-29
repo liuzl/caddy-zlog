@@ -2,6 +2,7 @@
     root ./htdocs
     zlog {
         log_dir ./server_zerolog
+        split_by hour
     }
     log ./access.log
 }

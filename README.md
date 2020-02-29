@@ -20,6 +20,7 @@ Rebuild caddy as follows:
 127.0.0.1 {
     zlog {
         log_dir ./server_zerolog
+        split_by hour
     }
 }
 ```
