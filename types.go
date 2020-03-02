@@ -34,16 +34,16 @@ type ResponseProxyWriter struct {
 	wroteHeader  bool
 }
 
-func (this *ResponseProxyWriter) Header() http.Header {
-	return this.writer.Header()
+func (w *ResponseProxyWriter) Header() http.Header {
+	return w.writer.Header()
 }
 
-func (this *ResponseProxyWriter) Write(bytes []byte) (int, error) {
-	if !this.wroteHeader {
-		this.WriteHeader(http.StatusOK)
+func (w *ResponseProxyWriter) Write(bytes []byte) (int, error) {
+	if !w.wroteHeader {
+		w.WriteHeader(http.StatusOK)
 	}
-	this.Body = append(this.Body, bytes[0:len(bytes)]...)
-	return this.writer.Write(bytes)
+	w.Body = append(w.Body, bytes[0:len(bytes)]...)
+	return w.writer.Write(bytes)
 }
 
 func cloneHeader(h http.Header) http.Header {
@@ -56,30 +56,30 @@ func cloneHeader(h http.Header) http.Header {
 	return h2
 }
 
-func (this *ResponseProxyWriter) WriteHeader(i int) {
-	if this.wroteHeader {
+func (w *ResponseProxyWriter) WriteHeader(i int) {
+	if w.wroteHeader {
 		return
 	}
-	this.wroteHeader = true
+	w.wroteHeader = true
 
-	h := this.writer.Header()
-	this.SourceHeader = cloneHeader(h)
+	h := w.writer.Header()
+	w.SourceHeader = cloneHeader(h)
 
 	// perform our revisions
-	for _, op := range this.ops {
+	for _, op := range w.ops {
 		op(h)
 	}
 
-	this.Code = i
-	this.writer.WriteHeader(i)
+	w.Code = i
+	w.writer.WriteHeader(i)
 }
 
-func (this *ResponseProxyWriter) delHeader(key string) {
+func (w *ResponseProxyWriter) delHeader(key string) {
 	// remove the existing one if any
-	this.writer.Header().Del(key)
+	w.writer.Header().Del(key)
 
 	// register a future deletion
-	this.ops = append(this.ops, func(h http.Header) {
+	w.ops = append(w.ops, func(h http.Header) {
 		h.Del(key)
 	})
 }
