@@ -2,7 +2,7 @@
 
 ## Overview
 
-`zlog` is a log middleware for [Caddy](https://github.com/caddyserver/caddy), it's based on https://github.com/rs/zerolog.
+`zlog` is a log middleware for [Caddy](https://github.com/caddyserver/caddy), it's based on https://github.com/rs/zerolog and https://github.com/liuzl/filestore.
 
 ## Installation
 
